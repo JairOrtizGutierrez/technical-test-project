@@ -1,50 +1,20 @@
-# React + TypeScript + Vite
+# React + Vite Technical Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a React project set up with [Vite](https://vitejs.dev/). The project was created to showcase a simple application for a technical test.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Upload Button: Allow users to upload an image, ensure the image is displayed on the canvas for editing.
+- Blur Button: Enable users to blur parts of the image by painting over areas with a brush tool.
+- Erase Button: Enable users to erase parts of the image by painting over them with the eraser tool.
+- Undo Button: Allow users to step back through their actions.
+- Reset All Button: Allow users to restore the image to its original state (before any blurring or erasing).
+- Save Button: Allow users to save the edited image after applying blur, erase, or other changes.
+- Download Button: Allow users to download the image after it has been edited.
+- Delete Button: Allow users to delete the saved image.
+- Local storage: Data should persist across page reloads or app restarts.
 
-## Expanding the ESLint configuration
+### Live Example
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+https://jairortizgutierrez.github.io/technical-test-project-showcase/
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
