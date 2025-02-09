@@ -1,0 +1,11 @@
+header {
+  border-bottom: 1px solid #E5E7EB;
+  background-color: #ffffff;
+}
+
+header>h1 {
+  margin: 0;
+  padding: 30px 0px;
+  color: #111827;
+  text-align: center;
+}

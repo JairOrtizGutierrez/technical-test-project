@@ -1,0 +1,93 @@
+#actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 60px 0px;
+}
+
+#actions>button,
+#actions>label[for="select-image"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border: none;
+  padding: 10px;
+  margin-right: 14px;
+}
+
+#actions>button>span,
+#actions>label>span {
+  margin-left: 8px;
+  margin-right: 4px;
+}
+
+#actions>button:last-child {
+  margin: 0;
+}
+
+#canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 120px;
+}
+
+#canvas-container>#cursor-canvas {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#canvas-container>#cursor-canvas.inactive {
+  display: none;
+}
+
+.swiper {
+  margin-top: 60px;
+}
+
+.swiper-slide {
+  width: 300px !important;
+  height: 250px !important;
+  border: 1px solid #000;
+  position: relative;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-slide button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border: none;
+  padding: 10px;
+  margin: 10px;
+}
+
+.swiper-slide #download-saved-image {
+  top: 0;
+  right: 0;
+}
+
+.swiper-slide #delete-saved-image {
+  top: 0;
+  right: 54px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: #212529 !important;
+  color: #fff !important;
+  padding: 12px !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 6px;
+}
