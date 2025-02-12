@@ -26,7 +26,6 @@ export const Home = () => {
   const [eraser, setEraser] = useState(false);
   const [blur, setBlur] = useState(false);
 
-  const [eraserSize, setEraserSize] = useLocalStorage('eraserSize', 20);
   const [blurSize, setBlurSize] = useLocalStorage('blurSize', 20);
   const [blurIntensity, setBlurIntensity] = useLocalStorage('blurIntensity', 20);
 
@@ -66,8 +65,8 @@ export const Home = () => {
       }
     }
 
-    blurIntensityInputRange.current.value = blurIntensity.toString();
-    blurSizeInputRange.current.value = blurSize.toString();
+    blurIntensityInputRange.current!.value = blurIntensity.toString();
+    blurSizeInputRange.current!.value = blurSize.toString();
   }, []);
 
   function loadImage(img: HTMLImageElement, storage: boolean) {
@@ -176,7 +175,7 @@ export const Home = () => {
     // Draw a line in main canvas
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(mouseX, mouseY, eraserSize, 0, Math.PI * 2);
+    ctx.arc(mouseX, mouseY, 20, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
     ctx.globalCompositeOperation = 'source-over';
@@ -184,7 +183,7 @@ export const Home = () => {
     // Draw a line in eraser canvas
     eraserCtx.globalCompositeOperation = 'destination-out';
     eraserCtx.beginPath();
-    eraserCtx.arc(mouseX, eraserSize, 20, 0, Math.PI * 2);
+    eraserCtx.arc(mouseX, 20, 20, 0, Math.PI * 2);
     eraserCtx.closePath();
     eraserCtx.fill();
     eraserCtx.globalCompositeOperation = 'source-over';
@@ -317,12 +316,7 @@ export const Home = () => {
   function changeBlurIntensity(e: React.ChangeEvent<HTMLInputElement>) {
     const intensity = parseInt(e.target.value) / 10;
     setBlurIntensity(intensity);
-    canvasForBlur.getContext('2d')!.filter = "blur(" + intensity + "px)";
-    // setCanvasForBlur(temporaryBlurCanvas);
-  }
-
-  function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>) {
-    setEraserSize(parseInt(e.target.value));
+    canvasForBlur!.getContext('2d')!.filter = "blur(" + intensity + "px)";
   }
 
   return (
@@ -382,7 +376,7 @@ export const Home = () => {
       </div>
       <div id='brush-size' className='d-flex justify-content-center align-items-center mb-5'>
         <div className='d-flex flex-column justify-content-center align-items-center mx-4'>
-          <label className='mb-2'>Insentity</label>
+          <label className='mb-2'>Intensity</label>
           <Form.Range onChange={changeBlurIntensity} ref={blurIntensityInputRange} />
         </div>
         <div className='d-flex flex-column justify-content-center align-items-center mx-4'>
