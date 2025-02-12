@@ -8,7 +8,7 @@ import { IconPlus } from '@tabler/icons-react';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { IconTrash } from '@tabler/icons-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { Button, Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Form, Toast, ToastContainer } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Navigation } from 'swiper/modules';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,10 +19,16 @@ import { useSessionStorage } from '../../hooks/userSessionStorage';
 export const Home = () => {
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const cursorCanvas = useRef<HTMLCanvasElement | null>(null);
+  const blurSizeInputRange = useRef<HTMLInputElement | null>(null);
+  const blurIntensityInputRange = useRef<HTMLInputElement | null>(null);
 
   const [down, setDown] = useState(false);
   const [eraser, setEraser] = useState(false);
   const [blur, setBlur] = useState(false);
+
+  const [eraserSize, setEraserSize] = useLocalStorage('eraserSize', 20);
+  const [blurSize, setBlurSize] = useLocalStorage('blurSize', 20);
+  const [blurIntensity, setBlurIntensity] = useLocalStorage('blurIntensity', 20);
 
   const [canvasForEraser, setCanvasForEraser] = useState<HTMLCanvasElement | null>(null);
   const [canvasForBlur, setCanvasForBlur] = useState<HTMLCanvasElement | null>(null);
@@ -59,6 +65,9 @@ export const Home = () => {
         img.onload = () => loadImage(img, true);
       }
     }
+
+    blurIntensityInputRange.current.value = blurIntensity.toString();
+    blurSizeInputRange.current.value = blurSize.toString();
   }, []);
 
   function loadImage(img: HTMLImageElement, storage: boolean) {
@@ -83,7 +92,7 @@ export const Home = () => {
     const temporaryBlurCanvas = document.createElement('canvas');
     temporaryBlurCanvas.width = img.width;
     temporaryBlurCanvas.height = img.height;
-    temporaryBlurCanvas.getContext('2d')!.filter = "blur(4px)";
+    temporaryBlurCanvas.getContext('2d')!.filter = "blur(" + blurIntensity + "px)";
     setCanvasForBlur(temporaryBlurCanvas);
   }
 
@@ -141,13 +150,13 @@ export const Home = () => {
 
     // Draw a line in cursor canvas
     cursorCtx.beginPath();
-    cursorCtx.arc(mouseX, mouseY, 20, 0, Math.PI * 2);
+    cursorCtx.arc(mouseX, mouseY, blurSize, 0, Math.PI * 2);
     cursorCtx.closePath();
     cursorCtx.fill();
 
     // Draw a line in blur canvas
     blurCtx.beginPath();
-    blurCtx.arc(mouseX, mouseY, 20, 0, Math.PI * 2);
+    blurCtx.arc(mouseX, mouseY, blurSize, 0, Math.PI * 2);
     blurCtx.closePath();
     blurCtx.fill();
   }
@@ -167,7 +176,7 @@ export const Home = () => {
     // Draw a line in main canvas
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(mouseX, mouseY, 20, 0, Math.PI * 2);
+    ctx.arc(mouseX, mouseY, eraserSize, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
     ctx.globalCompositeOperation = 'source-over';
@@ -175,7 +184,7 @@ export const Home = () => {
     // Draw a line in eraser canvas
     eraserCtx.globalCompositeOperation = 'destination-out';
     eraserCtx.beginPath();
-    eraserCtx.arc(mouseX, mouseY, 20, 0, Math.PI * 2);
+    eraserCtx.arc(mouseX, eraserSize, 20, 0, Math.PI * 2);
     eraserCtx.closePath();
     eraserCtx.fill();
     eraserCtx.globalCompositeOperation = 'source-over';
@@ -301,6 +310,21 @@ export const Home = () => {
     setSavedImages(savedImages.filter(savedImage => savedImage.uuid != uuid));
   }
 
+  function changeBlurSize(e: React.ChangeEvent<HTMLInputElement>) {
+    setBlurSize(parseInt(e.target.value));
+  }
+
+  function changeBlurIntensity(e: React.ChangeEvent<HTMLInputElement>) {
+    const intensity = parseInt(e.target.value) / 10;
+    setBlurIntensity(intensity);
+    canvasForBlur.getContext('2d')!.filter = "blur(" + intensity + "px)";
+    // setCanvasForBlur(temporaryBlurCanvas);
+  }
+
+  function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>) {
+    setEraserSize(parseInt(e.target.value));
+  }
+
   return (
     <>
       <div id='saved-images'>
@@ -355,6 +379,16 @@ export const Home = () => {
           <IconRestore stroke={2} />
           <span>Reset all</span>
         </Button>
+      </div>
+      <div id='brush-size' className='d-flex justify-content-center align-items-center mb-5'>
+        <div className='d-flex flex-column justify-content-center align-items-center mx-4'>
+          <label className='mb-2'>Insentity</label>
+          <Form.Range onChange={changeBlurIntensity} ref={blurIntensityInputRange} />
+        </div>
+        <div className='d-flex flex-column justify-content-center align-items-center mx-4'>
+          <label className='mb-2'>Size</label>
+          <Form.Range onChange={changeBlurSize} ref={blurSizeInputRange} />
+        </div>
       </div>
       <div id='canvas-container'>
         <canvas id='canvas' ref={canvas} onMouseMove={handleMouseMoveMainCanvas} onMouseDown={handleMouseDownMainCanvas} onMouseUp={handleMouseUpMainCanvas}></canvas>

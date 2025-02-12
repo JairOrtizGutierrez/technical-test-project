@@ -91,3 +91,9 @@
   height: auto !important;
   border-radius: 6px;
 }
+
+#brush-size {}
+
+input[type="range"] {
+  width: 200px;
+}
